@@ -6,6 +6,11 @@ $config = [
     'githubAuth' => config('services.github.client_id'),
 ];
 @endphp
+
+@php
+
+$config['liff']= Helpers\liffAll(); @endphp
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -15,6 +20,12 @@ $config = [
   <title>{{ config('app.name') }}</title>
 
   <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
+  <style>
+    input,button {
+      border-radius: 10px !important;
+    }
+  </style>
+
 </head>
 <body>
   <div id="app"></div>

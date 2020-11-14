@@ -1,54 +1,66 @@
 <template>
   <div class="row">
     <div class="col-lg-8 m-auto">
-      <card v-if="mustVerifyEmail" :title="$t('register')">
-        <div class="alert alert-success" role="alert">
-          {{ $t('verify_email_address') }}
-        </div>
-      </card>
-      <card v-else :title="$t('register')">
+
+      <card title="Register">
         <form @submit.prevent="register" @keydown="form.onKeydown($event)">
           <!-- Name -->
+
+             <div class="d-flex justify-content-center pt-4">
+          <!-- <iomg src="assets/images/register-pic.png" alt="" width="40%" /> -->
+          <div class="imageProfile" v-if="user">
+            <img :src="user.image_url" width="130" />
+          </div>
+        </div>
+
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('name') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" class="form-control" type="text" name="name">
+            <div class="col-6">
+              <input v-model="form.first_name" :class="{ 'is-invalid': form.errors.has('first_name') }" class="form-control" type="text" name="name" placeholder="ชื่อ">
               <has-error :form="form" field="name" />
+            </div>
+              <div class="col-6">
+              <input v-model="form.last_name" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-control" type="text" name="last_name" placeholder="นามสกุล">
+              <has-error :form="form" field="last_name" />
             </div>
           </div>
 
-          <!-- Email -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email">
+       <div class="form-group row">
+            <div class="col-6">
+              <input v-model="form.tel" :class="{ 'is-invalid': form.errors.has('tel') }" class="form-control" type="text" name="name" placeholder="เบอร์โทรศัพท์">
+              <has-error :form="form" field="tel" />
+            </div>
+              <div class="col-6">
+              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="text" name="last_name" placeholder="อีเมล">
               <has-error :form="form" field="email" />
             </div>
           </div>
 
-          <!-- Password -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password">
-              <has-error :form="form" field="password" />
-            </div>
+          <div class="form-group">
+              <input v-model="form.zipcode" :class="{ 'is-invalid': form.errors.has('zipcode') }" class="form-control" type="text" name="name" placeholder="รหัสไปรษณีย์">
+              <has-error :form="form" field="zipcode" />
           </div>
 
-          <!-- Password Confirmation -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('confirm_password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" class="form-control" type="password" name="password_confirmation">
-              <has-error :form="form" field="password_confirmation" />
-            </div>
+               <div class="form-group">
+              <input v-model="form.address" :class="{ 'is-invalid': form.errors.has('address') }" class="form-control" type="text" name="name" placeholder="ที่อยู่">
+              <has-error :form="form" field="address" />
           </div>
+
+               <div class="form-group">
+              <input v-model="form.city" :class="{ 'is-invalid': form.errors.has('city') }" class="form-control" type="text" name="name" placeholder="อำเภอ">
+              <has-error :form="form" field="city" />
+          </div>
+
+                 <div class="form-group">
+              <input v-model="form.province" :class="{ 'is-invalid': form.errors.has('province') }" class="form-control" type="text" name="name" placeholder="จังหวัด">
+              <has-error :form="form" field="province" />
+          </div>
+
 
           <div class="form-group row">
             <div class="col-md-7 offset-md-3 d-flex">
               <!-- Submit Button -->
-              <v-button :loading="form.busy">
-                {{ $t('register') }}
+              <v-button :loading="form.busy" class="w-100" type="success">
+                สมัครสมาชิก
               </v-button>
 
               <!-- GitHub Register Button -->
@@ -73,7 +85,7 @@ export default {
   },
 
   metaInfo () {
-    return { title: this.$t('register') }
+    return { title: 'ลงทะเบียน'}
   },
 
   data: () => ({
@@ -108,6 +120,9 @@ export default {
         this.$router.push({ name: 'home' })
       }
     }
-  }
+  },
+  async created() {
+    await this.initializeLiff('register', true, 'ลงทะเบียน')
+  },
 }
 </script>
