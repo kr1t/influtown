@@ -1,8 +1,13 @@
 <template>
-  <div class="row">
-    <div class="col-lg-8 m-auto">
 
-      <card title="Register">
+<div>
+  <div v-if="page == 0" class="p-5">
+    Loading...
+  </div>
+  <div class="container" v-if="page == 1">
+    <div class="row">
+ <div class="col-lg-8 m-auto pt-4" >
+      <card title="ลงทะเบียนสมาชิก">
         <form @submit.prevent="register" @keydown="form.onKeydown($event)">
           <!-- Name -->
 
@@ -26,17 +31,17 @@
 
        <div class="form-group row">
             <div class="col-6">
-              <input v-model="form.tel" :class="{ 'is-invalid': form.errors.has('tel') }" class="form-control" type="text" name="name" placeholder="เบอร์โทรศัพท์">
+              <input v-model="form.tel" :class="{ 'is-invalid': form.errors.has('tel') }" class="form-control" type="tel" name="name" placeholder="เบอร์โทรศัพท์">
               <has-error :form="form" field="tel" />
             </div>
               <div class="col-6">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="text" name="last_name" placeholder="อีเมล">
+              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="last_name" placeholder="อีเมล">
               <has-error :form="form" field="email" />
             </div>
           </div>
 
           <div class="form-group">
-              <input v-model="form.zipcode" :class="{ 'is-invalid': form.errors.has('zipcode') }" class="form-control" type="text" name="name" placeholder="รหัสไปรษณีย์">
+              <input v-model="form.zipcode" :class="{ 'is-invalid': form.errors.has('zipcode') }" class="form-control" type="tel" name="name" placeholder="รหัสไปรษณีย์">
               <has-error :form="form" field="zipcode" />
           </div>
 
@@ -70,18 +75,33 @@
         </form>
       </card>
     </div>
+    </div>
+
+
   </div>
+    <div v-if="page ==2" class="w-100">
+      <img src="https://i.imgur.com/Js199GN.png" class="w-100" @click="page=3">
+    </div>
+
+    <div v-if="page ==3" >
+      <influencerRegister/>
+    </div>
+</div>
+
 </template>
 
 <script>
 import Form from 'vform'
 import LoginWithGithub from '~/components/LoginWithGithub'
+import influencerRegister from './influenRegister'
 
+import axios from 'axios'
 export default {
   middleware: 'guest',
 
   components: {
-    LoginWithGithub
+    LoginWithGithub,
+    influencerRegister
   },
 
   metaInfo () {
@@ -89,8 +109,15 @@ export default {
   },
 
   data: () => ({
+    page:0,
     form: new Form({
-      name: '',
+      first_name: '',
+      last_name: '',
+      zipcode: '',
+      address: '',
+      city: '',
+      province: '',
+      line_user_id: '',
       email: '',
       password: '',
       password_confirmation: ''
@@ -99,30 +126,42 @@ export default {
   }),
 
   methods: {
-    async register () {
-      // Register the user.
-      const { data } = await this.form.post('/api/register')
+      async register() {
+      this.form.line_user_id = this.user.id
+      const { data, status } = await this.form.post('/api/register')
 
-      // Must verify email fist.
-      if (data.status) {
-        this.mustVerifyEmail = true
-      } else {
-        // Log in the user.
-        const { data: { token } } = await this.form.post('/api/login')
-
-        // Save the token.
-        this.$store.dispatch('auth/saveToken', { token })
-
-        // Update the user.
-        await this.$store.dispatch('auth/updateUser', { user: data })
-
-        // Redirect home.
-        this.$router.push({ name: 'home' })
+      if (status == 200) {
+       this.page = 2
+       this.toTop()
       }
-    }
+    },
+  },
+    watch: {
+    async user() {
+      const { data } = await axios.get(`/api/line/user/check/register?line_user_id=${this.user.id}`)
+
+      if (data.result.isRegistered) {
+        this.page = 2
+        this.loadingStop()
+      } else {
+        this.page = 1
+      }
+
+      this.form.email = this.user.email
+    },
   },
   async created() {
     await this.initializeLiff('register', true, 'ลงทะเบียน')
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.imageProfile img{
+      border-radius: 50%;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-bottom: 25px;
+}
+
+</style>

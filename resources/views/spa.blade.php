@@ -4,6 +4,7 @@ $config = [
     'locale' => $locale = app()->getLocale(),
     'locales' => config('app.locales'),
     'githubAuth' => config('services.github.client_id'),
+    'isLocal'=> env('APP_ENV') == 'local'
 ];
 @endphp
 
@@ -22,7 +23,7 @@ $config['liff']= Helpers\liffAll(); @endphp
   <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
   <style>
     input,button {
-      border-radius: 10px !important;
+      padding: 20px 10px;
     }
   </style>
 

@@ -41,6 +41,9 @@ export default {
       const formatted = Number(n).toLocaleString('en', options)
       return formatted
     },
+    toTop(){
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    },
     openWindow(url) {
       this.$liff.openWindow({
         url

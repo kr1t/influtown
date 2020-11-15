@@ -7,14 +7,14 @@
         color="#fff"
         :is-full-page="true"
         loader="dots"
-        background-color="#333333"
+        background-color="#80171A"
         :opacity="1"
       ></loading>
 
 
     <navbar />
 
-    <div class="container mt-4">
+    <div>
       <child />
     </div>
   </div>
