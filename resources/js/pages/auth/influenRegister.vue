@@ -1,28 +1,35 @@
 <template>
-  <div class="container pt-4">
+  <div class="container pt-4"  >
     <h3 class="text-center">
     สมัครเป็น influencer
     </h3>
-    <div class="card p-4">
-      <div class="card-no">1</div>
-      <div class="card-title">
+    <hr>
+    {{form}}
+    <div class="card p-4 mt-5" :class="form.gender">
+      <div class="card-no" :class="{active: form.gender}">1</div>
+      <div class="card-title gender" >
               เพศ
               <br>
-              <button class="male">ชาย</button>
-              <button class="female">หญิง</button>
-              <button class="lgbt">
+              <button class="btn M" @click="setGender('M')" :class="{active: form.gender=='M'}">ชาย</button>
+              <button class="btn F" @click="setGender('F')"   :class="{active: form.gender=='F'}">หญิง</button>
+              <button class="btn L" @click="setGender('L')"   :class="{active: form.gender=='L'}">
                 LGBT</button>
       </div>
     </div>
 
 
        <div class="card p-4 mt-5">
-      <div class="card-no">2</div>
+      <div class="card-no" :class="{active: form.age}">2</div>
       <div class="card-title">
               อายุ
               <br>
-              <select class="form-control">
-                <option value="">18-23 ปี</option>
+              <select class="form-control" v-model="form.age">
+                                                <option value=""> -- กรุณาเลือก 1 รายการ --</option>
+
+                                                <option value="1">ต่ำกว่า 18 ปี</option>
+
+                <option value="2">18-23 ปี</option>
+
               </select>
       </div>
     </div>
@@ -30,42 +37,53 @@
 
 
        <div class="card p-4 mt-5">
-      <div class="card-no">3</div>
+      <div class="card-no" :class="{active: form.type.length}">3</div>
       <div class="card-title">
               ความถนัดของคุณ
               <br>
-              <button>เสื้อผ้าและกีฬา</button>
-              <button>เครื่องสำอางค์</button>
-              <button>อาหาร</button>
-              <br>
-              <button>ท่องเที่ยว</button>
-              <button>เทคโนโลยี แก็ดเจ็ด เกม</button>
+
+
+             <b-form-group >
+      <b-form-checkbox-group
+        v-model="form.type"
+        :options="options"
+        name="flavour-2a"
+        stacked
+      ></b-form-checkbox-group>
+    </b-form-group>
+
+
+
+
+
       </div>
     </div>
 
 
         <div class="card p-4 mt-5">
-      <div class="card-no">4</div>
+      <div class="card-no" :class="{active: form.dislike}">4</div>
       <div class="card-title">
               สิ่งที่<span class="text-danger">ไม่</span>ถนัด
               <br>
-              <input type="radio" name="" id="">
-              <textarea name="" id="" cols="30" rows="10"></textarea>
+              <textarea v-model="form.dislike" class="form-control"></textarea>
       </div>
     </div>
 
 
 
         <div class="card p-4 mt-5">
-      <div class="card-no">5</div>
+      <div class="card-no" :class="{active: form.follow}">5</div>
       <div class="card-title">
               ยอด Follower
               <br>
-       <b-form-group label="Individual radios">
-      <b-form-radio v-model="selected" name="some-radios" value="A">Option A</b-form-radio>
-      <b-form-radio v-model="selected" name="some-radios" value="B">Option B</b-form-radio>
-            <b-form-radio v-model="selected" name="some-radios" value="B">Option B</b-form-radio>
-
+      <b-form-group >
+      <b-form-radio-group
+        v-model="form.follow"
+        :options="optionsFollow"
+        plain
+        stacked
+        name="plain-stacked"
+      ></b-form-radio-group>
     </b-form-group>
       </div>
     </div>
@@ -130,10 +148,49 @@
 </template>
 
 <script>
+import {findIndex} from 'lodash'
 export default {
 data:()=>({
-  selected:'A'
-})
+  selected:'A',
+      cName:'',
+       options: [
+          { text: 'เสื้อผ้าและกีฬา', value: 1 },
+          { text: 'เครื่องสำอางค์', value: 2 },
+          { text: 'อาหาร', value: 3 },
+          { text: 'ท่องเที่ยว', value: 4 },
+                    { text: 'เทคโนโลยี แก็ดเจ็ด เกม', value: 5 }
+
+        ],
+         optionsFollow: [
+          { text: 'ต่ำกว่า 1000', value: 1 },
+          { text: '1,000 - 10,000', value: 2 },
+          { text: '10,001 - 50,000', value: 3 },
+          { text: '50,01 - 100,000', value: 4 },
+          { text: '100,001 - 1,000,000', value: 5 },
+          { text: '1,000,000 ขึ้นไป', value: 6 },
+
+        ],
+    form:{
+      gender:'',
+      age:'',
+      type:[],
+      dislike:'',
+      follow:''
+
+    }
+
+}),
+methods:{
+  setGender(g){
+    this.form.gender = g
+  },
+  setType(n){
+    let find = findIndex(this.form.type, el => el == n)
+          this.form.type.splice(find,1)
+
+    this.form.type.push(n)
+  }
+}
 }
 </script>
 
@@ -146,6 +203,11 @@ button {
   margin-right: 10px;
   border-radius: 10px;
 }
+.gender .active{
+  background: #fff;
+  color: #147aab;
+  transition: 0.5 all;
+}
 .card-no{
   width: 45px;
     height: -13px;
@@ -157,18 +219,25 @@ button {
     position: absolute;
     margin-left: -15px;
     margin-top: -50px;
+    color: #333;
 }
-.male{
+.card-no.active{
+  background:royalblue;
+      border: 1px solid royalblue;
+
+  color: #fff;
+}
+.M{
     color: #fff;
 
   background-color: #147aab;
 }
-.female{
+.F{
     color: #fff;
 
   background-color: pink;
 }
-.lgbt {
+.L {
   color: #fff;
   --g-red: #d04b36;
   --g-orange: #e36511;

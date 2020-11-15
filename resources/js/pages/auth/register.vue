@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div >
   <div v-if="page == 0" class="p-5">
     Loading...
   </div>
@@ -80,7 +80,7 @@
 
   </div>
     <div v-if="page ==2" class="w-100">
-      <img src="https://i.imgur.com/Js199GN.png" class="w-100" @click="page=3">
+      <img src="https://i.imgur.com/nrnTHFi.jpg" class="w-100" @click="page=3">
     </div>
 
     <div v-if="page ==3" >
@@ -109,7 +109,7 @@ export default {
   },
 
   data: () => ({
-    page:0,
+    page:3,
     form: new Form({
       first_name: '',
       last_name: '',
