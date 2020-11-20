@@ -21,7 +21,7 @@
           <div class="form-group row">
             <div class="col-6">
               <input v-model="form.first_name" :class="{ 'is-invalid': form.errors.has('first_name') }" class="form-control" type="text" name="name" placeholder="ชื่อ">
-              <has-error :form="form" field="name" />
+              <has-error :form="form" field="first_name" />
             </div>
               <div class="col-6">
               <input v-model="form.last_name" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-control" type="text" name="last_name" placeholder="นามสกุล">
@@ -109,7 +109,7 @@ export default {
   },
 
   data: () => ({
-    page:3,
+    page:1,
     form: new Form({
       first_name: '',
       last_name: '',

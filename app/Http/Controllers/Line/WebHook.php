@@ -40,6 +40,7 @@ class WebHook extends Controller
                         if ($checkRegister != true) {
                             return $this->sendRegisterImage();
                         }
+                        // หากไม่มีการลงทะเบียนจะยืงการ์ดให้ลงทะเบียน
 
 
 
@@ -69,13 +70,14 @@ class WebHook extends Controller
     }
     public function sendRegisterImage()
     {
-        return $this->bot->addText('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว')->addImageURI(
-            'กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว',
-            'https://i.imgur.com/Js199GN.png',
-            $this->liff->get('register'),
-            330,
-            604
-        )->reply();
+        return $this->bot->addText('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว')
+            ->addImageURI(
+                'กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว',
+                'https://i.imgur.com/1tgleaL.jpg',
+                $this->liff->get('register'),
+                1040,
+                1040
+            )->reply();
     }
 
     public function test()
