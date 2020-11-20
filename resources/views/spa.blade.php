@@ -4,8 +4,14 @@ $config = [
     'locale' => $locale = app()->getLocale(),
     'locales' => config('app.locales'),
     'githubAuth' => config('services.github.client_id'),
+    'isLocal'=> env('APP_ENV') == 'local'
 ];
 @endphp
+
+@php
+
+$config['liff']= Helpers\liffAll(); @endphp
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -15,6 +21,12 @@ $config = [
   <title>{{ config('app.name') }}</title>
 
   <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
+  <style>
+    input,button {
+      padding: 20px 10px;
+    }
+  </style>
+
 </head>
 <body>
   <div id="app"></div>

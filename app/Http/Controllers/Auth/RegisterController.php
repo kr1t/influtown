@@ -49,11 +49,29 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+
+        $messages = [
+            'first_name.required' => 'กรุณากรอก ชื่อจริง',
+            'first_name.max' => 'กรุณากรอก ชื่อจริง 255',
+            'last_name.required' => 'กรุณากรอก นามสกุล',
+            'email.unique' => 'กรุณากรอก อีเมลอื่นๆ'
+
+        ];
+        return Validator::make(
+            $data,
+            [
+                'first_name' => 'required|max:20',
+                'last_name' => 'required|max:255',
+                'tel' => 'required|max:13|min:9',
+                'zipcode' => 'required|max:255',
+                'address' => 'required|max:255',
+                'city' => 'required|max:255',
+                'province' => 'required|max:255',
+                'line_user_id' => 'required|max:255',
+                'email' => 'required|email|max:255|unique:users',
+            ],
+            $messages
+        );
     }
 
     /**
@@ -65,9 +83,17 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'zipcode' => $data['zipcode'],
+            'address' => $data['address'],
+            'tel' => $data['tel'],
+
+            'city' => $data['city'],
+            'province' => $data['province'],
+            'line_user_id' => $data['line_user_id'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt('123456'),
         ]);
     }
 }

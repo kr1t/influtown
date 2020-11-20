@@ -1,79 +1,58 @@
+import * as types from '../mutation-types'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import * as types from '../mutation-types'
+
+
 
 // state
 export const state = {
-  user: null,
-  token: Cookies.get('token')
+  user: {
+    id: 'U9dbcc5b44c3f15d67f4ab2de4b0aac2a',
+    image_url: '/assets/images/user-de.jpg',
+    email: 'test@gmail.com',
+    detail: {}
+  },
+  token: ''
 }
 
 // getters
 export const getters = {
-  user: state => state.user,
-  token: state => state.token,
-  check: state => state.user !== null
+  user: state => state.user
 }
 
 // mutations
 export const mutations = {
-  [types.SAVE_TOKEN] (state, { token, remember }) {
+  [types.FETCH_USER_SUCCESS](state, { user }) {
+    state.user = user
+  },
+  [types.SAVE_LINE_TOKEN](state, { token, remember }) {
     state.token = token
-    Cookies.set('token', token, { expires: remember ? 365 : null })
-  },
-
-  [types.FETCH_USER_SUCCESS] (state, { user }) {
-    state.user = user
-  },
-
-  [types.FETCH_USER_FAILURE] (state) {
-    state.token = null
-    Cookies.remove('token')
-  },
-
-  [types.LOGOUT] (state) {
-    state.user = null
-    state.token = null
-
-    Cookies.remove('token')
-  },
-
-  [types.UPDATE_USER] (state, { user }) {
-    state.user = user
+    Cookies.set('line_token', token, { expires: remember ? 365 : null })
   }
 }
 
 // actions
 export const actions = {
-  saveToken ({ commit, dispatch }, payload) {
-    commit(types.SAVE_TOKEN, payload)
+  saveToken({ commit }, payload) {
+    commit(types.SAVE_LINE_TOKEN, payload)
   },
 
-  async fetchUser ({ commit }) {
+  async fetchUser({ commit }, data) {
     try {
-      const { data } = await axios.get('/api/user')
-
       commit(types.FETCH_USER_SUCCESS, { user: data })
     } catch (e) {
-      commit(types.FETCH_USER_FAILURE)
+      // console.log(e)
     }
   },
 
-  updateUser ({ commit }, payload) {
-    commit(types.UPDATE_USER, payload)
-  },
+  // async checkRegister(user_id) {
+  //   // console.log('start check regis')
+  //   // console.log(url.registerCheck)
+  //   const { data } = await axios.get(`${url.registerCheck}?user_id=${user_id}`).catch(e => {
+  //     // console.log(e)
+  //     return false
+  //   })
 
-  async logout ({ commit }) {
-    try {
-      await axios.post('/api/logout')
-    } catch (e) { }
-
-    commit(types.LOGOUT)
-  },
-
-  async fetchOauthUrl (ctx, { provider }) {
-    const { data } = await axios.post(`/api/oauth/${provider}`)
-
-    return data.url
-  }
+  //   // console.log(this.user.id, data)
+  // }
 }
