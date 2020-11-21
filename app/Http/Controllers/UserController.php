@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Influencer;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -62,14 +63,19 @@ class UserController extends Controller
     }
     public function checkRegistered(Request $request)
     {
+        $find2 = false;
         $find = User::where('line_user_id', $request->line_user_id)->first();
-
         $isRegistered = $find ? true : false;
+        if ($find) {
+            $find2 = Influencer::where('user_id', $find->id)->first();
+        }
 
         return response()->json([
             'message' => '',
             'result' => [
-                'isRegistered' =>  $isRegistered
+                'isRegistered' =>  $isRegistered,
+                'isRegisteredF' =>  $find2 ? true : false
+
             ],
         ]);
     }

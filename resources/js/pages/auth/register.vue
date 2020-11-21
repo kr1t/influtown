@@ -84,7 +84,14 @@
     </div>
 
     <div v-if="page ==3" >
-      <influencerRegister/>
+      <influencerRegister @next="f()"/>
+    </div>
+
+    <div v-if="page ==4" >
+      <h1 class="text-primary mt-4 text-center">
+      คุณลงทะเบียนสำเร็จแล้ว
+
+      </h1>
     </div>
 </div>
 
@@ -109,7 +116,7 @@ export default {
   },
 
   data: () => ({
-    page:1,
+    page:0,
     form: new Form({
       first_name: '',
       last_name: '',
@@ -135,6 +142,11 @@ export default {
        this.toTop()
       }
     },
+    f(){
+      this.page = 4
+             this.toTop()
+
+    }
   },
     watch: {
     async user() {
@@ -145,6 +157,11 @@ export default {
         this.loadingStop()
       } else {
         this.page = 1
+      }
+
+      if (data.result.isRegisteredF) {
+        this.page = 4
+        this.loadingStop()
       }
 
       this.form.email = this.user.email

@@ -15,6 +15,7 @@ class CreateInfluencerImagesTable extends Migration
     {
         Schema::create('influencer_images', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('influencer_id');
             $table->string('image_url');
             $table->timestamps();
         });

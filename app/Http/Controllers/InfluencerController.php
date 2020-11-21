@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Influencer;
+use App\User;
+
 use Illuminate\Http\Request;
 
 class InfluencerController extends Controller
@@ -35,7 +37,19 @@ class InfluencerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $req = $request->all();
+        $uid = User::where('line_user_id', $request->line_user_id)->first();
+        $req['user_id'] = $uid ? $uid->id : 1;
+
+        $i = Influencer::create($req);
+        foreach ($request->reviews as $img) {
+            $i->images()->create([
+                "image_url"
+                => $img
+            ]);
+        }
+
+        return ['status' => true];
     }
 
     /**

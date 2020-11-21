@@ -21,7 +21,7 @@ class CreateInfluencersTable extends Migration
             $table->tinyInteger('age');
             $table->json('type');
             $table->text('dislike')->nullable();
-            $table->tinyInteger('follower');
+            $table->tinyInteger('follow');
             $table->string('profile_url');
             $table->double('budget', [10, 2])->default(0);
             $table->string('name');

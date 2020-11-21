@@ -46,6 +46,10 @@ class WebHook extends Controller
 
                         $user = $this->bot->getUser();
 
+                        if ($text == '#ความรู้') {
+                            return $this->bot->addImage(['https://i.imgur.com/cz8NWqc.jpg', 'https://i.imgur.com/uSlmrkP.jpg', 'https://i.imgur.com/kLz78K7.jpg', 'https://i.imgur.com/kLz78K7.jpg', 'https://i.imgur.com/ShnDkwu.jpg'])->reply();
+                        }
+
 
                         return [
                             'status' => 200,
