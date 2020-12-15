@@ -42,11 +42,9 @@
           <option value="1">ต่ำกว่า 18 ปี</option>
 
           <option value="2">18-23 ปี</option>
-                    <option value="3">24-27 ปี</option>
-            <option value="3">28-30 ปี</option>
-            <option value="3">30 ปีขึ้นไป</option>
-
-
+          <option value="3">24-27 ปี</option>
+          <option value="3">28-30 ปี</option>
+          <option value="3">30 ปีขึ้นไป</option>
         </select>
       </div>
     </div>
@@ -104,15 +102,11 @@
     </div>
 
     <div class="card p-4 mt-5">
-      <div class="card-no"  :class="{ active: form.budget }">7</div>
+      <div class="card-no" :class="{ active: form.budget }">7</div>
       <div class="card-title">
         งบประมาณที่ต้องการได้รับ/ 1รีวิว ('พิมพ์ราคาหรือหมายเหตุก็ได้')
         <br />
-          <input
-            type="text"
-            class="form-control"
-            v-model="form.budget"
-          />
+        <input type="text" class="form-control" v-model="form.budget" />
       </div>
     </div>
 
@@ -130,8 +124,7 @@
       <div class="card-title">
         ชื่อจริง
         <br />
-        <input type="text" class="form-control"             v-model="form.name"
- />
+        <input type="text" class="form-control" v-model="form.name" />
       </div>
     </div>
 
@@ -140,19 +133,20 @@
       <div class="card-title">
         ชื่อเล่น
         <br />
-        <input type="text" class="form-control"            v-model="form.nickname"
- />
+        <input type="text" class="form-control" v-model="form.nickname" />
       </div>
     </div>
     <div class="d mb-4">
-      <button class="btn btn-primary w-100" @click="register()">สมัคร Influencer</button>
+      <button class="btn btn-primary w-100" @click="register()">
+        สมัคร Influencer
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import { findIndex } from "lodash";
-import axios from 'axios';
+import axios from "axios";
 export default {
   data: () => ({
     selected: "A",
@@ -178,57 +172,54 @@ export default {
       type: [],
       dislike: "",
       follow: "",
-      reviews:[],
-      profile_url:'',
-      budget:'',
-      name:'',
-      nickname:''
+      reviews: [],
+      profile_url: "",
+      budget: "",
+      name: "",
+      nickname: "",
+      line_user_id: "",
     },
-
   }),
   methods: {
     setGender(g) {
       this.form.gender = g;
     },
-    async uploadImg(file){
+    async uploadImg(file) {
       let form = new FormData();
-      form.append('uploadFileObj', file)
-      const{data} = await axios.post('/api/image/upload', form)
-      console.log(data)
-     return data.url
+      form.append("uploadFileObj", file);
+      const { data } = await axios.post("/api/image/upload", form);
+      console.log(data);
+      return data.url;
     },
     setType(n) {
       let find = findIndex(this.form.type, (el) => el == n);
       this.form.type.splice(find, 1);
       this.form.type.push(n);
     },
-    async  register(){
-      const{data} = await axios.post('/api/influencers', this.form)
-      if(data.status == true){
-        this.$emit('next',true)
+    async register() {
+      this.form.line_user_id = this.user.id;
+      const { data } = await axios.post("/api/influencers", this.form);
+      if (data.status == true) {
+        this.$emit("next", true);
       }
-
     },
-    async setReview(event){
-      let files = event.target.files
-      for (let i = 0; i < files.length; i++)  //for multiple files
-    {
+    async setReview(event) {
+      let files = event.target.files;
+      for (
+        let i = 0;
+        i < files.length;
+        i++ //for multiple files
+      ) {
         let f = files[i];
         let name = files[i].name;
-                   let u = await this.uploadImg(f)
-                           this.form.reviews.push(u);
-
-
-    }
-
-
+        let u = await this.uploadImg(f);
+        this.form.reviews.push(u);
+      }
     },
-    async setProfile(event){
-
-        let u = await this.uploadImg(event.target.files[0])
-        this.form.profile_url = u;
-
-    }
+    async setProfile(event) {
+      let u = await this.uploadImg(event.target.files[0]);
+      this.form.profile_url = u;
+    },
   },
 };
 </script>

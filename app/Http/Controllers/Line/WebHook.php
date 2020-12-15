@@ -51,6 +51,15 @@ class WebHook extends Controller
                         }
 
 
+                        if ($text == '#ค้นหา') {
+                            return $this->findInfluencer();
+                        } else if ($text == '#เลือกหมวด') {
+                            return $this->findInfluencer(false);
+                        } else if ($text == 'ค้นหา#เพศ') {
+                            return $this->selectGender();
+                        }
+
+
                         return [
                             'status' => 200,
                         ];
@@ -82,6 +91,252 @@ class WebHook extends Controller
                 1040,
                 1040
             )->reply();
+    }
+
+    public function findInfluencer($clearData = true)
+    {
+        return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
+            [
+                "type" => "bubble",
+                "body" => [
+                    "type" => "box",
+                    "layout" => "vertical",
+                    "spacing" => "md",
+
+                    "contents" => [
+                        [
+                            "type" => "text",
+                            "text" => "กรุณาเลือกหมวด",
+                            "weight" => "bold",
+                            "size" => "xl",
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => "Sauce, Onions, Pickles, Lettuce & Cheese",
+                            "size" => "xxs",
+                            "color" => "#AAAAAA",
+                            "wrap" => true,
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เพศ",
+                                "text" => "ค้นหา#เพศ"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "อายุ",
+                                "text" => "ค้นหา#อายุ"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ความถนัด",
+                                "text" => "ค้นหา#ความถนัด"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ยอด Follower",
+                                "text" => "ค้นหา#follower"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ค้นหาเลย",
+                                "text" => "#ค้นหาเลย"
+                            ],
+                            "color" => "#FF8600FF",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+                    ]
+                ]
+            ],
+
+        ])
+            ->reply();
+    }
+
+    public function selectGender()
+    {
+        return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
+            [
+                "type" => "bubble",
+                "body" => [
+                    "type" => "box",
+                    "layout" => "vertical",
+                    "spacing" => "md",
+
+                    "contents" => [
+                        [
+                            "type" => "text",
+                            "text" => "กรุณาเลือกเพศ",
+                            "weight" => "bold",
+                            "size" => "xl",
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => "Sauce, Onions, Pickles, Lettuce & Cheese",
+                            "size" => "xxs",
+                            "color" => "#AAAAAA",
+                            "wrap" => true,
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เพศชาย",
+                                "text" => "เพศ#ชาย"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เพศหญิง",
+                                "text" => "เพศ#หญิง"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เพศ LGBT",
+                                "text" => "เพศ#lgbt"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+
+
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เลือกหมวดอิ่น",
+                                "text" => "#เลือกหมวด"
+                            ],
+                            "color" => "#FF8600FF",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+                    ]
+                ]
+            ],
+
+        ])
+            ->reply();
+    }
+
+
+    public function selectAge()
+    {
+        return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
+            [
+                "type" => "bubble",
+                "body" => [
+                    "type" => "box",
+                    "layout" => "vertical",
+                    "spacing" => "md",
+
+                    "contents" => [
+                        [
+                            "type" => "text",
+                            "text" => "กรุณาเลือกเพศ",
+                            "weight" => "bold",
+                            "size" => "xl",
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => "Sauce, Onions, Pickles, Lettuce & Cheese",
+                            "size" => "xxs",
+                            "color" => "#AAAAAA",
+                            "wrap" => true,
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "<18",
+                                "text" => "gender#ชาย"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "18-23",
+                                "text" => "เพศ#หญิง"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เพศ LGBT",
+                                "text" => "เพศ#lgbt"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+
+
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เลือกหมวดอิ่น",
+                                "text" => "#เลือกหมวด"
+                            ],
+                            "color" => "#FF8600FF",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+                    ]
+                ]
+            ],
+
+        ])
+            ->reply();
     }
 
     public function test()
