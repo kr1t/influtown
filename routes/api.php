@@ -41,3 +41,6 @@ Route::resource('influencers', 'InfluencerController');
 
 Route::post('webHook', 'Line\WebHook@index');
 Route::get('test', 'Line\WebHook@test');
+Route::get('migrate', function () {
+    \Artisan::call('migrate');
+});

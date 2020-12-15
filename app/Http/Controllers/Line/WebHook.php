@@ -50,6 +50,7 @@ class WebHook extends Controller
                             return $this->bot->addImage(['https://i.imgur.com/cz8NWqc.jpg', 'https://i.imgur.com/uSlmrkP.jpg', 'https://i.imgur.com/kLz78K7.jpg', 'https://i.imgur.com/kLz78K7.jpg', 'https://i.imgur.com/ShnDkwu.jpg'])->reply();
                         }
 
+                        $textexplode = explode("#", $text);
 
                         if ($text == '#ค้นหา') {
                             return $this->findInfluencer();
@@ -57,9 +58,9 @@ class WebHook extends Controller
                             return $this->findInfluencer(false);
                         } else if ($text == 'ค้นหา#เพศ') {
                             return $this->selectGender();
+                        } else if ($textexplode[0] == 'เพศ') {
+                            return $this->setGender($textexplode[1]);
                         }
-
-
                         return [
                             'status' => 200,
                         ];
@@ -258,6 +259,33 @@ class WebHook extends Controller
         ])
             ->reply();
     }
+
+    public function setGender($gender)
+    {
+        $g = '';
+        switch ($gender) {
+            case 'ชาย';
+                $g = 'M';
+                break;
+
+            case 'หญิง';
+                $g = 'F';
+                break;
+
+            case 'lgbt';
+                $g = 'L';
+                break;
+        }
+
+        $user = $this->bot->getUser();
+        $user->update([
+            's_gender' => $g
+        ]);
+
+        return $this->bot->addText("ทำการเลือกเพศ {$gender} สำเร็จ")
+            ->reply();
+    }
+
 
 
     public function selectAge()
