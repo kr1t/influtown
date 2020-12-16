@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Helpers\LineBot;
 use Helpers\LineLiff;
+use App\Influencer;
 
 class WebHook extends Controller
 {
@@ -52,14 +53,42 @@ class WebHook extends Controller
 
                         $textexplode = explode("#", $text);
 
+
+
+
                         if ($text == '#ค้นหา') {
                             return $this->findInfluencer();
-                        } else if ($text == '#เลือกหมวด') {
+                        }
+                        if ($text == '#เลือกหมวด') {
                             return $this->findInfluencer(false);
-                        } else if ($text == 'ค้นหา#เพศ') {
+                        }
+                        if ($text == 'ค้นหา#เพศ') {
                             return $this->selectGender();
-                        } else if ($textexplode[0] == 'เพศ') {
+                        }
+                        if ($text == 'ค้นหา#อายุ') {
+                            return $this->selectAge();
+                        }
+                        if ($text == 'ค้นหา#ความถนัด') {
+                            return $this->selectType();
+                        }
+                        if ($text == 'ค้นหา#follower') {
+                            return $this->selectFollower();
+                        }
+
+                        if ($text == '#ค้นหาเลย') {
+                            return $this->searchInfluencer();
+                        }
+                        if ($textexplode[0] == 'เพศ') {
                             return $this->setGender($textexplode[1]);
+                        }
+                        if ($textexplode[0] == 'อายุ') {
+                            return $this->setAge($textexplode[1]);
+                        }
+                        if ($textexplode[0] == 'ความถนัด') {
+                            return $this->setType($textexplode[1]);
+                        }
+                        if ($textexplode[0] == 'Follower') {
+                            return $this->setFollower($textexplode[1]);
                         }
                         return [
                             'status' => 200,
@@ -81,6 +110,21 @@ class WebHook extends Controller
         $find = $this->bot->getUser();
         $isRegistered = $find ? true : false;
         return $isRegistered;
+    }
+
+    public function searchInfluencer()
+    {
+        $bot = $this->bot->setUser('U9dbcc5b44c3f15d67f4ab2de4b0aac2a');
+
+        $user = $this->bot->getUser();
+        $search = Influencer::where('gender', $user->s_gender)->get()->pluck('name');
+
+        foreach ($search as $s) {
+            $this->bot->addText($s);
+        }
+
+        return
+            $this->bot->reply();
     }
     public function sendRegisterImage()
     {
@@ -181,6 +225,7 @@ class WebHook extends Controller
             ->reply();
     }
 
+
     public function selectGender()
     {
         return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
@@ -260,6 +305,8 @@ class WebHook extends Controller
             ->reply();
     }
 
+
+
     public function setGender($gender)
     {
         $g = '';
@@ -287,6 +334,97 @@ class WebHook extends Controller
     }
 
 
+    public function setAge($age)
+    {
+
+        $a = '';
+        switch ($age) {
+            case 'ต่ำกว่า18';
+                $a = 1;
+                break;
+            case '18-23';
+                $a = 2;
+                break;
+            case '24-27';
+                $a = 3;
+                break;
+            case '28-30';
+                $a = 4;
+                break;
+            case '30ขึ้นไป';
+                $a = 5;
+                break;
+        }
+
+        $user = $this->bot->getUser();
+        $user->update([
+            's_age' => $a
+        ]);
+        return $this->bot->addText($a)
+            ->reply();
+    }
+
+    public function setType($type)
+    {
+
+        $a = '';
+        switch ($type) {
+            case 'เสื้อผ้าและกีฬา';
+                $a = 1;
+                break;
+            case 'เครื่องสำอางค์';
+                $a = 2;
+                break;
+            case 'อาหาร';
+                $a = 3;
+                break;
+            case 'ท่องเที่ยว';
+                $a = 4;
+                break;
+            case 'เทคโนโลยี';
+                $a = 5;
+                break;
+        }
+
+        $user = $this->bot->getUser();
+        $user->update([
+            's_type' => $a
+        ]);
+        return $this->bot->addText($a)
+            ->reply();
+    }
+    public function setFollower($type)
+    {
+
+        $a = '';
+        switch ($type) {
+            case 'ต่ำกว่า1000';
+                $a = 1;
+                break;
+            case '1000-10,000';
+                $a = 2;
+                break;
+            case '10,001-50,000';
+                $a = 3;
+                break;
+            case '50,001-100,000';
+                $a = 4;
+                break;
+            case '100,001-1,000,000';
+                $a = 5;
+                break;
+            case '1,000,000ขึ้นไป';
+                $a = 6;
+                break;
+        }
+
+        $user = $this->bot->getUser();
+        $user->update([
+            's_follow' => $a
+        ]);
+        return $this->bot->addText($a)
+            ->reply();
+    }
 
     public function selectAge()
     {
@@ -301,7 +439,7 @@ class WebHook extends Controller
                     "contents" => [
                         [
                             "type" => "text",
-                            "text" => "กรุณาเลือกเพศ",
+                            "text" => "กรุณาเลือกอายุ",
                             "weight" => "bold",
                             "size" => "xl",
                             "contents" => []
@@ -318,8 +456,8 @@ class WebHook extends Controller
                             "type" => "button",
                             "action" => [
                                 "type" => "message",
-                                "label" => "<18",
-                                "text" => "gender#ชาย"
+                                "label" => "ต่ำกว่า 18",
+                                "text" => "อายุ#ต่ำกว่า18"
                             ],
                             "margin" => "lg",
                             "style" => "primary"
@@ -329,7 +467,7 @@ class WebHook extends Controller
                             "action" => [
                                 "type" => "message",
                                 "label" => "18-23",
-                                "text" => "เพศ#หญิง"
+                                "text" => "อายุ#18-23"
                             ],
                             "margin" => "lg",
                             "style" => "primary"
@@ -338,8 +476,30 @@ class WebHook extends Controller
                             "type" => "button",
                             "action" => [
                                 "type" => "message",
-                                "label" => "เพศ LGBT",
-                                "text" => "เพศ#lgbt"
+                                "label" => "24-27",
+                                "text" => "อายุ#24-27"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "28-30",
+                                "text" => "อายุ#28-30"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "30 ขึ้นไป",
+                                "text" => "อายุ#30ขึ้นไป"
                             ],
                             "margin" => "lg",
                             "style" => "primary"
@@ -367,11 +527,227 @@ class WebHook extends Controller
             ->reply();
     }
 
+    public function selectType()
+    {
+        return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
+            [
+                "type" => "bubble",
+                "body" => [
+                    "type" => "box",
+                    "layout" => "vertical",
+                    "spacing" => "md",
+
+                    "contents" => [
+                        [
+                            "type" => "text",
+                            "text" => "กรุณาเลือกความถนัดของอินฟลูเอนเซอร์",
+                            "weight" => "bold",
+                            "size" => "xl",
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => "Sauce, Onions, Pickles, Lettuce & Cheese",
+                            "size" => "xxs",
+                            "color" => "#AAAAAA",
+                            "wrap" => true,
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เสื้อผ้าและกีฬา",
+                                "text" => "ความถนัด#เสื้อผ้าและกีฬา"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เครื่องสำอางค์",
+                                "text" => "ความถนัด#เครื่องสำอางค์"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "อาหาร",
+                                "text" => "ความถนัด#อาหาร"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+
+
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ท่องเที่ยว",
+                                "text" => "ความถนัด#ท่องเที่ยว"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เทคโนโลยี แก็ดเจ็ด เกม",
+                                "text" => "ความถนัด#เทคโนโลยี"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เลือกหมวดอิ่น",
+                                "text" => "#เลือกหมวด"
+                            ],
+                            "color" => "#FF8600FF",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ]
+
+                    ]
+                ]
+            ],
+
+        ])
+            ->reply();
+    }
+
+    public function selectFollower()
+    {
+        return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
+            [
+                "type" => "bubble",
+                "body" => [
+                    "type" => "box",
+                    "layout" => "vertical",
+                    "spacing" => "md",
+
+                    "contents" => [
+                        [
+                            "type" => "text",
+                            "text" => "กรุณาเลือกยอดผู้ติดตามของอินฟลูเอนเซอร์",
+                            "weight" => "bold",
+                            "size" => "xl",
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => "Sauce, Onions, Pickles, Lettuce & Cheese",
+                            "size" => "xxs",
+                            "color" => "#AAAAAA",
+                            "wrap" => true,
+                            "contents" => []
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ต่ำกว่า 1000",
+                                "text" => "Follower#ต่ำกว่า1000"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "1000-10,000",
+                                "text" => "Follower#1000-10,000"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "10,001-50,000",
+                                "text" => "Follower#10,001-50,000"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
+
+
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "50,001-100,000",
+                                "text" => "Follower#50,001-100,000"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "100,001-1,000,000",
+                                "text" => "Follower#100,001-1,000,000"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "1,000,000 ขึ้นไป",
+                                "text" => "Follower#1,000,000ขึ้นไป"
+                            ],
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เลือกหมวดอิ่น",
+                                "text" => "#เลือกหมวด"
+                            ],
+                            "color" => "#FF8600FF",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ]
+
+                    ]
+                ]
+            ],
+
+        ])
+            ->reply();
+    }
+
+
     public function test()
     {
         $bot = $this->bot->setUser('U9dbcc5b44c3f15d67f4ab2de4b0aac2a');
 
+        $user = $this->bot->getUser();
+        $search = Influencer::where('gender', $user->s_gender)->get()->pluck('name');
 
-        return $bot->getUser();
+        foreach ($search as $s) {
+            $this->bot->addText($s);
+        }
+
+        return
+            $this->bot->push();
     }
 }
