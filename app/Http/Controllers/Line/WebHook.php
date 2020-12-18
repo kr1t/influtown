@@ -151,7 +151,7 @@ class WebHook extends Controller
                                         "text" => "เพศ",
                                         "size" => "sm",
                                         "color" => "#AAAAAA",
-                                        "flex" => 1,
+                                        "flex" => 3,
                                     ],
                                     [
                                         "type" => "text",
@@ -173,7 +173,7 @@ class WebHook extends Controller
                                         "text" => "ช่วงอายุ",
                                         "size" => "sm",
                                         "color" => "#AAAAAA",
-                                        "flex" => 1,
+                                        "flex" => 3,
                                     ],
                                     [
                                         "type" => "text",
@@ -195,7 +195,7 @@ class WebHook extends Controller
                                         "text" => "บัดเจ้ด",
                                         "size" => "sm",
                                         "color" => "#AAAAAA",
-                                        "flex" => 1,
+                                        "flex" => 3,
                                     ],
                                     [
                                         "type" => "text",
@@ -221,8 +221,8 @@ class WebHook extends Controller
                         "type" => "button",
                         "action" => [
                             "type" => "uri",
-                            "label" => "WEBSITE",
-                            "uri" => "https://linecorp.com"
+                            "label" => "ดูข้อมูล",
+                            "uri" => "https://liff.line.me/1655241745-ZpdPpxdk?id={$data['id']}"
                         ],
                         "color" => "#FF6600FF",
                         "height" => "sm",
@@ -242,6 +242,10 @@ class WebHook extends Controller
 
         $user = $this->bot->getUser();
         $search = Influencer::where('gender', $user->s_gender)->get();
+
+        if (count($search) < 1) {
+            return $this->bot->addText('ไม่พบอินฟลูเอนเซอร์')->reply();
+        }
         $cards = [];
 
         foreach ($search as $influ) {
@@ -266,6 +270,13 @@ class WebHook extends Controller
 
     public function findInfluencer($clearData = true)
     {
+        $user = $this->bot->getUser();
+        $user->update([
+            's_gender' => null,
+            's_age' => null,
+            's_type' => null,
+            's_follow' => null
+        ]);
         return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
             [
                 "type" => "bubble",
@@ -423,6 +434,18 @@ class WebHook extends Controller
                             "style" => "primary"
                         ],
 
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ค้นหาเลย",
+                                "text" => "#ค้นหาเลย"
+                            ],
+                            "color" => "#2554C7",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+
                     ]
                 ]
             ],
@@ -455,8 +478,7 @@ class WebHook extends Controller
             's_gender' => $g
         ]);
 
-        return $this->bot->addText("ทำการเลือกเพศ {$gender} สำเร็จ")
-            ->reply();
+        return $this->selectAge();
     }
 
 
@@ -486,8 +508,7 @@ class WebHook extends Controller
         $user->update([
             's_age' => $a
         ]);
-        return $this->bot->addText($a)
-            ->reply();
+        return $this->selectType();
     }
 
     public function setType($type)
@@ -516,8 +537,7 @@ class WebHook extends Controller
         $user->update([
             's_type' => $a
         ]);
-        return $this->bot->addText($a)
-            ->reply();
+        return $this->selectFollower();
     }
     public function setFollower($type)
     {
@@ -548,8 +568,7 @@ class WebHook extends Controller
         $user->update([
             's_follow' => $a
         ]);
-        return $this->bot->addText($a)
-            ->reply();
+        return $this->searchInfluencer();
     }
 
     public function selectAge()
@@ -641,6 +660,17 @@ class WebHook extends Controller
                                 "text" => "#เลือกหมวด"
                             ],
                             "color" => "#FF8600FF",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ค้นหาเลย",
+                                "text" => "#ค้นหาเลย"
+                            ],
+                            "color" => "#2554C7",
                             "margin" => "lg",
                             "style" => "primary"
                         ],
@@ -742,7 +772,18 @@ class WebHook extends Controller
                             "color" => "#FF8600FF",
                             "margin" => "lg",
                             "style" => "primary"
-                        ]
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ค้นหาเลย",
+                                "text" => "#ค้นหาเลย"
+                            ],
+                            "color" => "#2554C7",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
 
                     ]
                 ]
@@ -851,7 +892,18 @@ class WebHook extends Controller
                             "color" => "#FF8600FF",
                             "margin" => "lg",
                             "style" => "primary"
-                        ]
+                        ],
+                        [
+                            "type" => "button",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "ค้นหาเลย",
+                                "text" => "#ค้นหาเลย"
+                            ],
+                            "color" => "#2554C7",
+                            "margin" => "lg",
+                            "style" => "primary"
+                        ],
 
                     ]
                 ]
