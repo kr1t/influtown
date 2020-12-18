@@ -241,7 +241,7 @@ class WebHook extends Controller
         $bot = $this->bot->setUser('U9dbcc5b44c3f15d67f4ab2de4b0aac2a');
 
         $user = $this->bot->getUser();
-        $search = Influencer::where('gender', $user->s_gender)->get();
+        $search = Influencer::where('gender', $user->s_gender)->where('age', $user->s_age)->where('follow', $user->s_follow)->get();
 
         if (count($search) < 1) {
             return $this->bot->addText('ไม่พบอินฟลูเอนเซอร์')->reply();
@@ -271,12 +271,16 @@ class WebHook extends Controller
     public function findInfluencer($clearData = true)
     {
         $user = $this->bot->getUser();
-        $user->update([
-            's_gender' => null,
-            's_age' => null,
-            's_type' => null,
-            's_follow' => null
-        ]);
+
+        if ($clearData) {
+            $user->update([
+                's_gender' => null,
+                's_age' => null,
+                's_type' => null,
+                's_follow' => null
+            ]);
+        }
+
         return $this->bot->addCarousel('กรุณาทำการลงทะเบียนก่อนใช้งานฟังชันดังกล่าว', [
             [
                 "type" => "bubble",
