@@ -112,19 +112,145 @@ class WebHook extends Controller
         return $isRegistered;
     }
 
+    public function influCard($data)
+    {
+        return [
+            "type" => "bubble",
+            "hero" => [
+                "type" => "image",
+                "url" => $data['profile_url'],
+                "size" => "full",
+                "aspectRatio" => "20:13",
+                "aspectMode" => "cover",
+
+            ],
+            "body" => [
+                "type" => "box",
+                "layout" => "vertical",
+                "contents" => [
+                    [
+                        "type" => "text",
+                        "text" => $data['full_name'],
+                        "weight" => "bold",
+                        "size" => "xl",
+                        "contents" => []
+                    ],
+                    [
+                        "type" => "box",
+                        "layout" => "vertical",
+                        "spacing" => "sm",
+                        "margin" => "lg",
+                        "contents" => [
+                            [
+                                "type" => "box",
+                                "layout" => "baseline",
+                                "spacing" => "sm",
+                                "contents" => [
+                                    [
+                                        "type" => "text",
+                                        "text" => "เพศ",
+                                        "size" => "sm",
+                                        "color" => "#AAAAAA",
+                                        "flex" => 1,
+                                    ],
+                                    [
+                                        "type" => "text",
+                                        "text" => $data['gender_text'],
+                                        "size" => "sm",
+                                        "color" => "#666666",
+                                        "flex" => 5,
+                                        "wrap" => true,
+                                    ]
+                                ]
+                            ],
+                            [
+                                "type" => "box",
+                                "layout" => "baseline",
+                                "spacing" => "sm",
+                                "contents" => [
+                                    [
+                                        "type" => "text",
+                                        "text" => "ช่วงอายุ",
+                                        "size" => "sm",
+                                        "color" => "#AAAAAA",
+                                        "flex" => 1,
+                                    ],
+                                    [
+                                        "type" => "text",
+                                        "text" => $data['age_text'],
+                                        "size" => "sm",
+                                        "color" => "#666666",
+                                        "flex" => 5,
+                                        "wrap" => true,
+                                    ]
+                                ]
+                            ],
+                            [
+                                "type" => "box",
+                                "layout" => "baseline",
+                                "spacing" => "sm",
+                                "contents" => [
+                                    [
+                                        "type" => "text",
+                                        "text" => "บัดเจ้ด",
+                                        "size" => "sm",
+                                        "color" => "#AAAAAA",
+                                        "flex" => 1,
+                                    ],
+                                    [
+                                        "type" => "text",
+                                        "text" => "" . $data['budget'],
+                                        "size" => "sm",
+                                        "color" => "#666666",
+                                        "flex" => 5,
+                                        "wrap" => true,
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "footer" => [
+                "type" => "box",
+                "layout" => "vertical",
+                "flex" => 0,
+                "spacing" => "sm",
+                "contents" => [
+                    [
+                        "type" => "button",
+                        "action" => [
+                            "type" => "uri",
+                            "label" => "WEBSITE",
+                            "uri" => "https://linecorp.com"
+                        ],
+                        "color" => "#FF6600FF",
+                        "height" => "sm",
+                        "style" => "primary"
+                    ],
+                    [
+                        "type" => "spacer",
+                        "size" => "sm"
+                    ]
+                ]
+            ]
+        ];
+    }
     public function searchInfluencer()
     {
         $bot = $this->bot->setUser('U9dbcc5b44c3f15d67f4ab2de4b0aac2a');
 
         $user = $this->bot->getUser();
-        $search = Influencer::where('gender', $user->s_gender)->get()->pluck('name');
+        $search = Influencer::where('gender', $user->s_gender)->get();
+        $cards = [];
 
-        foreach ($search as $s) {
-            $this->bot->addText($s);
+        foreach ($search as $influ) {
+            $influ->profile_url = url($influ->profile_url);
+            array_push($cards,  $this->influCard($influ));
         }
 
         return
-            $this->bot->reply();
+            $this->bot->addCarousel('influ', $cards)->reply();
     }
     public function sendRegisterImage()
     {
@@ -741,13 +867,15 @@ class WebHook extends Controller
         $bot = $this->bot->setUser('U9dbcc5b44c3f15d67f4ab2de4b0aac2a');
 
         $user = $this->bot->getUser();
-        $search = Influencer::where('gender', $user->s_gender)->get()->pluck('name');
+        $search = Influencer::where('gender', $user->s_gender)->get();
+        $cards = [];
 
-        foreach ($search as $s) {
-            $this->bot->addText($s);
+        foreach ($search as $influ) {
+            $influ->profile_url = url($influ->profile_url);
+            array_push($cards,  $this->influCard($influ));
         }
 
         return
-            $this->bot->push();
+            $this->bot->addCarousel('influ', $cards)->push();
     }
 }

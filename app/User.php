@@ -46,7 +46,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
      * @var array
      */
     protected $appends = [
-        'photo_url',
+        'photo_url'
     ];
 
     /**
@@ -58,6 +58,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     {
         return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '.jpg?s=200&d=mm';
     }
+
+
 
     /**
      * Get the oauth providers.
