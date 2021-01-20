@@ -44,3 +44,6 @@ Route::get('test', 'Line\WebHook@test');
 Route::get('migrate', function () {
     \Artisan::call('migrate');
 });
+
+Route::post('payment', 'OmiseController@payment');
+Route::get('billDetail', 'OmiseController@billDetail');

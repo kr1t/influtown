@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Influencer extends Model
 {
-    protected $fillable = ['gender', 'age', 'type', 'dislike', 'follow', 'profile_url', 'budget', 'name', 'nickname', 'user_id'];
+    protected $fillable = ['gender', 'age', 'type', 'dislike', 'follow', 'profile_url', 'budget', 'name', 'nickname', 'user_id', 'expiry'];
 
     protected $casts = [
         'type' => 'Array',

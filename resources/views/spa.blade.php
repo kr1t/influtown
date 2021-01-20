@@ -38,5 +38,7 @@ $config['liff']= Helpers\liffAll(); @endphp
 
   {{-- Load the application scripts --}}
   <script src="{{ mix('dist/js/app.js') }}"></script>
+    <script type="text/javascript" src="https://cdn.omise.co/omise.js"></script>
+
 </body>
 </html>

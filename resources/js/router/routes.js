@@ -14,6 +14,7 @@ export default [
 
   { path: '/home', name: 'home', component: page('home.vue') },
   { path: '/influ', name: 'influ', component: page('influ.vue') },
+  { path: '/payment', name: 'payment', component: page('payment.vue') },
 
   {
     path: '/settings',
