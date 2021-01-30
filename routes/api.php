@@ -47,3 +47,5 @@ Route::get('migrate', function () {
 
 Route::post('payment', 'OmiseController@payment');
 Route::get('billDetail', 'OmiseController@billDetail');
+Route::get('report/{id}', 'ReportController@show');
+Route::post('report', 'ReportController@store');

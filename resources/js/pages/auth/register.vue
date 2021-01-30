@@ -142,7 +142,8 @@
     </div>
 
     <div v-if="page == 4">
-      <h1 class="text-primary mt-4 text-center">คุณลงทะเบียนสำเร็จแล้ว</h1>
+      <Payment />
+      <!-- <h1 class="text-primary mt-4 text-center">คุณลงทะเบียนสำเร็จแล้ว</h1> -->
     </div>
   </div>
 </template>
@@ -151,7 +152,7 @@
 import Form from "vform";
 import LoginWithGithub from "~/components/LoginWithGithub";
 import influencerRegister from "./influenRegister";
-
+import Payment from "../payment";
 import axios from "axios";
 export default {
   middleware: "guest",
@@ -159,6 +160,7 @@ export default {
   components: {
     LoginWithGithub,
     influencerRegister,
+    Payment,
   },
 
   metaInfo() {
