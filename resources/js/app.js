@@ -15,6 +15,9 @@ const queryString = decodeURIComponent(window.location.search).replace('?liff.st
 const params = new URLSearchParams(queryString)
 Vue.prototype.$liffParams = params
 
+import VueLazyLoad from 'vue-lazyload'
+Vue.use(VueLazyLoad)
+
 /* eslint-disable no-new */
 new Vue({
   i18n,

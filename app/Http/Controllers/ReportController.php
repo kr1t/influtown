@@ -16,7 +16,7 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
+        return Report::with('influencer.user')->with('user')->whereStatus(0)->latest()->get();
     }
 
     /**
@@ -66,5 +66,15 @@ class ReportController extends Controller
             "user" => $user
 
         ];
+    }
+
+    public function update($id, Request $request)
+    {
+        $report = Report::find($id);
+        $report->update([
+            'status' => 1
+        ]);
+
+        return $report;
     }
 }

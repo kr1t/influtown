@@ -19,6 +19,7 @@ class CreateReportsTable extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('influencer_id');
             $table->text('problem');
+            $table->boolean('status')->default(0);
 
             $table->timestamps();
         });

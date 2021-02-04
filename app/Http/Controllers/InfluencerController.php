@@ -61,6 +61,7 @@ class InfluencerController extends Controller
     public function show(Influencer $influencer)
     {
         $influencer->user;
+        $influencer->images;
         return $influencer;
     }
 

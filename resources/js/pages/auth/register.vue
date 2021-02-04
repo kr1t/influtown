@@ -160,7 +160,7 @@ export default {
   components: {
     LoginWithGithub,
     influencerRegister,
-    Payment,
+    Payment
   },
 
   metaInfo() {
@@ -168,7 +168,7 @@ export default {
   },
 
   data: () => ({
-    page: 3,
+    page: 1,
     form: new Form({
       first_name: "",
       last_name: "",
@@ -179,9 +179,9 @@ export default {
       line_user_id: "",
       email: "",
       password: "",
-      password_confirmation: "",
+      password_confirmation: ""
     }),
-    mustVerifyEmail: false,
+    mustVerifyEmail: false
   }),
 
   methods: {
@@ -197,7 +197,7 @@ export default {
     f() {
       this.page = 4;
       this.toTop();
-    },
+    }
   },
   watch: {
     async user() {
@@ -218,11 +218,11 @@ export default {
       }
 
       this.form.email = this.user.email;
-    },
+    }
   },
   async created() {
     await this.initializeLiff("register", true, "ลงทะเบียน");
-  },
+  }
 };
 </script>
 

@@ -34,6 +34,12 @@
         {{ influ.user.email }}
       </a>
 
+      <hr />
+      ภาพผลงานการรีวิว
+      <div v-for="img in influ.images" :key="img.id">
+        <img :src="img.image_url" class="w-100 mt-3" />
+      </div>
+
       <div class="mt-4">
         <router-link :to="`/report?id=${id}`">
           <button class="btn btn-outline-secondary w-100">
@@ -52,9 +58,40 @@
 
 <script>
 import axios from "axios";
+require("vue-image-lightbox/dist/vue-image-lightbox.min.css");
+import LightBox from "vue-image-lightbox";
+
 export default {
+  components: {
+    LightBoxx: LightBox
+  },
   data: () => ({
-    influ: {}
+    influ: {},
+    media: [
+      {
+        // For image
+        thumb: "http://example.com/thumb.jpg",
+        src: "http://example.com/image.jpg",
+        caption: "caption to display. receive <html> <b>tag</b>", // Optional
+        srcset: "..." // Optional for displaying responsive images
+      },
+      {
+        // For video
+        thumb:
+          "https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg",
+        sources: [
+          {
+            src: "https://www.w3schools.com/html/mov_bbb.mp4",
+            type: "video/mp4"
+          }
+        ],
+        type: "video",
+        caption: "<h4>Monsters Inc.</h4>",
+        width: 800, // required
+        height: 600, // required
+        autoplay: true //Optional to autoplay video when lightbox opens
+      }
+    ]
   }),
   methods: {
     async fetch() {

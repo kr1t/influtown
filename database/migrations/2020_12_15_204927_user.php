@@ -14,10 +14,10 @@ class User extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('s_gender', ['M', 'F', 'L'])->comment('M(ale) F(email) L(LGBT)');
-            $table->tinyInteger('s_age');
-            $table->json('s_type');
-            $table->tinyInteger('s_follow');
+            $table->enum('s_gender', ['M', 'F', 'L'])->comment('M(ale) F(email) L(LGBT)')->nullable();
+            $table->tinyInteger('s_age')->nullable();
+            $table->json('s_type')->nullable();
+            $table->tinyInteger('s_follow')->nullable();
         });
     }
 

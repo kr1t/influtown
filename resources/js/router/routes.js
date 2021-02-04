@@ -33,10 +33,22 @@ export default [
     component: page("auth/verification/resend.vue")
   },
 
-  { path: '/home', name: 'home', component: page('home.vue') },
+  // { path: '/home', name: 'home', component: page('home.vue') },
   { path: '/influ', name: 'influ', component: page('influ.vue') },
   { path: '/payment', name: 'payment', component: page('payment.vue') },
+  {
+    path: "/home",
+    component: page("home/index.vue"),
+    children: [
+      { path: "", redirect: { name: "home.report" } },
 
+      {
+        path: "report",
+        name: "home.report",
+        component: page("home/report.vue")
+      }
+    ]
+  },
   {
     path: "/settings",
     component: page("settings/index.vue"),
