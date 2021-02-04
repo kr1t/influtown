@@ -9,6 +9,9 @@ class LineLiff
 
         "register" => [
             "dev" => "1655241745-5JxqyOxP",
+        ],
+        "influ" => [
+            "dev" => "1655241745-ZpdPpxdk",
         ]
 
     ];

@@ -106,7 +106,9 @@ export default {
       return t;
     }
   },
-  created() {
+  async created() {
+    await this.initializeLiff("influ", true, "ลงทะเบียน");
+
     this.fetch();
   }
 };

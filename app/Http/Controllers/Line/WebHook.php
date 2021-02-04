@@ -242,10 +242,16 @@ class WebHook extends Controller
 
         $user = $this->bot->getUser();
         $search = Influencer::where(function ($q) use ($user) {
-            $q->where('gender', $user->s_gender);
-            $q->where('age', $user->s_age);
 
-            $q->where('follow', $user->s_follow);
+            if ($user->s_gender) {
+                $q->where('gender', $user->s_gender);
+            }
+            if ($user->s_age) {
+                $q->where('age', $user->s_age);
+            }
+            if ($user->s_follow) {
+                $q->where('follow',);
+            }
         })->get();
 
         if (count($search) < 1) {

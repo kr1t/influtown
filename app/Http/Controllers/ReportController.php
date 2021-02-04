@@ -16,7 +16,7 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return Report::with('influencer.user')->with('user')->whereStatus(0)->latest()->get();
+        return Report::with('influencer.user')->with('user')->with('images')->whereStatus(0)->latest()->get();
     }
 
     /**

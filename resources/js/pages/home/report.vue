@@ -42,13 +42,22 @@
           </td>
           <th scope="row">{{ r.created_at_text }}</th>
           <th scope="row">
-            <button class="btn btn-primary" @click="closeCase(r.id)">
+            <button class="btn btn-warning" @click="preview(r.images)">
+              ดูรูปภาพ
+            </button>
+            <button class="btn btn-info" @click="closeCase(r.id)">
               ปิดเคส
             </button>
           </th>
         </tr>
       </tbody>
     </table>
+
+    <b-modal ref="my-modal" hide-footer hide-title>
+      <div class="mt-4" v-for="i in imgs" :key="i.id">
+        <img :src="i.image_url" class="w-100" />
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -56,12 +65,12 @@
 import axios from "axios";
 export default {
   data: () => ({
-    reports: []
+    reports: [],
+    imgs: []
   }),
   methods: {
     async fetch() {
       const { data } = await axios.get("/api/reports");
-
       this.reports = data;
     },
     async closeCase(id) {
@@ -70,6 +79,10 @@ export default {
         const { data } = await axios.post("/api/report/" + id + "/update");
         this.fetch();
       }
+    },
+    preview(imgs) {
+      this.imgs = imgs;
+      this.$refs["my-modal"].show();
     }
   },
   created() {
